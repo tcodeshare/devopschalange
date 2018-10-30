@@ -1,0 +1,10 @@
+
+docker run \
+    -v /var/run/docker.sock:/var/run/docker.sock \
+    -v /home/tomasz/.m2:/root/.m2 \
+    -v /home/tomasz/work/guide/devopschalange/servletapp:/workspace \
+    ubs/build-time-env:latest \
+    /opt/ubs/bin/build-time-setup.sh \
+    deploy fabric8:push 
+    #deploy fabric8:push -X
+    #clean
