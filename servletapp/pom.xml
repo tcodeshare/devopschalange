@@ -26,9 +26,10 @@
 
     <registry.url>false</registry.url>
     <!-- fabric8 conf -->
-    <!--docker.registry>nexus.ubs.net:18081</docker.registry-->
     <fabric8.skip>false</fabric8.skip>
     <fabric8.generator.name>nexus.ubs.net:18081/ubs/%a:%t</fabric8.generator.name>
+    <!-- postgres -->
+    <postgresql.version>9.1-901.jdbc4</postgresql.version>
 
   </properties>
 
@@ -50,6 +51,7 @@
         <scope>import</scope>
       </dependency>
     </dependencies>
+
   </dependencyManagement>
 
   <dependencies>
@@ -62,6 +64,13 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-actuator</artifactId>
+    </dependency>
+
+    <!-- db access-->
+    <dependency>
+        <groupId>postgresql</groupId>
+        <artifactId>postgresql</artifactId>
+        <version>${postgresql.version}</version>
     </dependency>
 
     <!-- testing -->

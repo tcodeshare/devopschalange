@@ -1,0 +1,40 @@
+# Create App + DB 
+---
+version: '3'
+
+services:
+  db-primary:
+    image: crunchydata/crunchy-postgres:centos7-9.6.10-2.1.0
+    expose:
+    - "5432"
+    volumes:
+    - primary:/pgdata
+    environment:
+    - PGHOST=/tmp
+    - MAX_CONNECTIONS=101
+    - SHARED_BUFFERS=128MB
+    - MAX_WAL_SENDERS=7
+    - WORK_MEM=5MB
+    - TEMP_BUFFERS=9MB
+    - PG_PRIMARY_USER=primaryuser
+    - PG_PRIMARY_PASSWORD=password
+    - PG_MODE=primary
+    - PG_ROOT_PASSWORD=password
+    env_file:
+    - datasources-cm.env
+  servletapp:
+    image: nexus.ubs.net:18081/ubs/servletapp:1.0
+    ports:
+    - "16384:16384"
+    links:
+    - db-primary
+    command: |
+        /bin/sh -c "
+        export JAVA_OPTIONS=\"-Ddb.URL=jdbc:postgresql://$$PG_PRIMARY_HOST/$$PG_DATABASE -Ddb.host=$$PG_PRIMARY_HOST -Ddb.port=$$PG_PRIMARY_PORT -Ddb.name=$$PG_DATABASE -Ddb.username=$$PG_USER -Ddb.password=$$PG_PASSWORD\"
+        /deployments/run-java.sh
+        "
+    env_file:
+    - datasources-cm.env
+volumes:
+  primary:
+  replica:
